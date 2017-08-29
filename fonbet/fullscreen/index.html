@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+        <script src="index.js"></script>
+        <script>
+            var canvas, stage, exportRoot, fnStartAnimation;
+
+            function getWindowSize() {
+                return {
+                    iw: Math.min(document.documentElement.clientWidth, window.innerWidth || 0),
+                    ih: Math.min(document.documentElement.clientHeight, window.innerHeight || 0),
+                }
+            }
+
+            function init() {
+                canvas = document.getElementById("canvas");
+                var comp = AdobeAn.getComposition("FD400AA1CA164858827D9B8B1676C338");
+                var lib = comp.getLibrary();
+                var loader = new createjs.LoadQueue(false);
+                loader.addEventListener("fileload", function(evt) {
+                    handleFileLoad(evt, comp)
+                });
+                loader.addEventListener("complete", function(evt) {
+                    handleComplete(evt, comp)
+                });
+                var lib = comp.getLibrary();
+                loader.loadManifest(lib.properties.manifest);
+            }
+
+            function handleFileLoad(evt, comp) {
+                var images = comp.getImages();
+                if (evt && (evt.item.type == "image")) {
+                    images[evt.item.id] = evt.result;
+                }
+            }
+
+            function handleComplete(evt, comp) {
+                var lib = comp.getLibrary();
+
+                var ssMetadata = lib.ssMetadata;
+                exportRoot = new lib.index();
+                stage = new lib.Stage(canvas);
+                stage.addChild(exportRoot);
+                stage.enableMouseOver();
+                fnStartAnimation = function() {
+                    createjs.Ticker.setFPS(lib.properties.fps);
+                    createjs.Ticker.addEventListener("tick", stage);
+                }
+
+                function makeResponsive() {
+                    (resizeCanvas = () => {
+                        var sScale = getWindowSize();
+                        var iw = sScale.iw,
+                            ih = sScale.ih,
+                            w = sScale.iw,
+                            h = sScale.ih,
+                            p = window.devicePixelRatio;
+
+                        stage.scaleX = stage.scaleY = p;
+
+                        canvas.width = iw * p;
+                        canvas.height = ih * p;
+                        canvas.style.width = iw + 'px';
+                        canvas.style.height = ih + 'px';
+                    })();
+                    window.addEventListener('resize', resizeCanvas);
+                }
+                makeResponsive();
+                AdobeAn.compositionLoaded(lib.properties.id);
+                fnStartAnimation();
+            }
+        </script>
+    </head>
+
+    <body onload="init();" style="margin:0px;">
+        <canvas id="canvas" style="position: absolute; background-color:rgba(255, 255, 255, 1.00);"></canvas>
+    </body>
+</html>
