@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <script>
+            window.images = {};
+            var IMGS = [
+                
+                {src:"images/d.png", id:"d"},
+                {src:"images/logo.jpg", id:"logo"},
+                {src:"images/t1.png", id:"t1"},
+                {src:"images/t2.png", id:"t2"},
+                {src:"images/t3.png", id:"t3"},
+                {src:"images/zoom.jpg", id:"zoom"}
+                
+            ];
+            for(var i = 0; i < IMGS.length; i++){
+                var img = new Image();
+                img.src = IMGS[i].src;
+                images[IMGS[i].id] = img;
+            }
+            
+            var MouseEvent = function(element, selector){
+                element.classList.toggle(selector);
+            }
+        </script>
+        <style>
+            #view {
+                position: absolute;
+                height: 250px; top: 0; left: 0;
+                box-sizing: border-box;
+                border: solid 1px rgb(118, 118, 118);
+                overflow: hidden;
+                
+                transition-duration: .6s;
+                transition-property: width;
+                transition-timing-function: ease-in-out;
+                
+                -webkit-transition-duration: .6s;
+                -webkit-transition-property: width;
+                -webkit-transition-timing-function: ease-in-out;
+                
+                -moz-transition-duration: .6s;
+                -moz-transition-property: width;
+                -moz-transition-timing-function: ease-in-out;
+                
+                -ms-transition-duration: .6s;
+                -ms-transition-property: width;
+                -ms-transition-timing-function: ease-in-out;
+                
+                -o-transition-duration: .6s;
+                -o-transition-property: width;
+                -o-transition-timing-function: ease-in-out;
+            }
+            
+            .close {
+                width: 300px;
+            }
+            
+            .open {
+                width: 600px;
+            }
+            
+            #canvas, #box {
+                position: absolute;
+                width: 600px; height: 250px;
+                top: 0; left: 0;
+            }
+            
+            #box {
+                transition-duration: .4s;
+                transition-property: opacity;
+                
+                -webkit-transition-duration: .4s;
+                -webkit-transition-property: opacity;
+                
+                -moz-transition-duration: .4s;
+                -moz-transition-property: opacity;
+                
+                -ms-transition-duration: .4s;
+                -ms-transition-property: opacity;
+                
+                -o-transition-duration: .4s;
+                -o-transition-property: opacity;
+            }
+            
+            .hide {
+                opacity: 0;
+            }
+            
+            .show {
+                opacity: 1;
+            }
+            
+        </style>
+        <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+        <script src="index.js"></script>
+    </head>
+    <body style="margin:0px;">
+        <div id="view" class="close" onmouseover="MouseEvent(this, 'open');" onmouseout="MouseEvent(this, 'open');">
+            <div id="box" class="hide">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+     </body>
+    <script>
+        var c = document.querySelector('#canvas');
+        stage = new createjs.Stage(c);
+        stage.addChild(new lib.index());	
+        
+        var p = window.devicePixelRatio;
+        stage.scaleX = stage.scaleY = p;
+        c.width = 600 * p; c.height = 250 * p;
+        
+        createjs.Ticker.setFPS(30);
+        createjs.Ticker.addEventListener("tick", stage);
+        
+        setTimeout(function(){
+            document.querySelector('#box').classList.toggle('show');  
+        }, 50);
+    </script>
+</html>
