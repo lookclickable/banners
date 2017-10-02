@@ -1,0 +1,85 @@
+<!--
+	NOTES:
+	1. All tokens are represented by '$' sign in the template.
+	2. You can write your code only wherever mentioned.
+	3. "DO NOT" alter the tokens in the template html as they are required during publishing.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>getcar2_600-300</title>
+<!-- write your code here -->
+<style>
+    #main, #canvas {
+        position: absolute;
+        width: 600px; height: 300px;
+        top: 0; left: 0;
+        z-index: 1;
+    }
+    
+    #btn_left, #btn_right {
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        top: 0;
+        z-index: 2;
+    }
+    
+    #btn_left{
+        left: 0;
+    }
+    
+    #btn_right{
+        right: 0;
+    }
+</style>
+
+<script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+<script src="getcar2_600-300.js?1504785841790"></script>
+<script>
+var canvas, stage, exportRoot;
+function init() {
+	// --- write your JS code here ---
+	
+	createjs.MotionGuidePlugin.install();
+
+	canvas = document.getElementById("canvas");
+	images = images||{};
+
+	var loader = new createjs.LoadQueue(false);
+	loader.addEventListener("fileload", handleFileLoad);
+	loader.addEventListener("complete", handleComplete);
+	loader.loadManifest(lib.properties.manifest);
+}
+
+function handleFileLoad(evt) {
+	if (evt.item.type == "image") { images[evt.item.id] = evt.result; }
+}
+
+function handleComplete(evt) {
+	exportRoot = new lib.getcar2_600300();
+
+	stage = new createjs.Stage(canvas);
+	stage.addChild(exportRoot);
+	stage.update();
+	stage.enableMouseOver();
+
+	createjs.Ticker.setFPS(lib.properties.fps);
+	createjs.Ticker.addEventListener("tick", stage);
+}
+
+</script>
+
+<!-- write your code here -->
+
+</head>
+<body onload="init();" style="background-color:#D4D4D4;margin:0px;">
+    <div id="main">
+        <div id="btn_left"></div>
+        <div id="btn_right"></div>
+        <canvas id="canvas" width="600" height="300" style="background-color:#000000"></canvas>
+    </div>
+</body>
+</html>
