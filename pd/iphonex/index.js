@@ -2,9 +2,70 @@
 
 var p; // shortcut to reference prototypes
 var lib={};var ss={};var img={};
+lib.webFontTxtInst = {}; 
+var loadedTypekitCount = 0;
+var loadedGoogleCount = 0;
+var gFontsUpdateCacheList = [];
+var tFontsUpdateCacheList = [];
 lib.ssMetadata = [];
 
 
+
+lib.updateListCache = function (cacheList) {		
+	for(var i = 0; i < cacheList.length; i++) {		
+		if(cacheList[i].cacheCanvas)		
+			cacheList[i].updateCache();		
+	}		
+};		
+
+lib.addElementsToCache = function (textInst, cacheList) {		
+	var cur = textInst;		
+	while(cur != null && cur != exportRoot) {		
+		if(cacheList.indexOf(cur) != -1)		
+			break;		
+		cur = cur.parent;		
+	}		
+	if(cur != exportRoot) {		
+		var cur2 = textInst;		
+		var index = cacheList.indexOf(cur);		
+		while(cur2 != null && cur2 != cur) {		
+			cacheList.splice(index, 0, cur2);		
+			cur2 = cur2.parent;		
+			index++;		
+		}		
+	}		
+	else {		
+		cur = textInst;		
+		while(cur != null && cur != exportRoot) {		
+			cacheList.push(cur);		
+			cur = cur.parent;		
+		}		
+	}		
+};		
+
+lib.gfontAvailable = function(family, totalGoogleCount) {		
+	lib.properties.webfonts[family] = true;		
+	var txtInst = lib.webFontTxtInst && lib.webFontTxtInst[family] || [];		
+	for(var f = 0; f < txtInst.length; ++f)		
+		lib.addElementsToCache(txtInst[f], gFontsUpdateCacheList);		
+
+	loadedGoogleCount++;		
+	if(loadedGoogleCount == totalGoogleCount) {		
+		lib.updateListCache(gFontsUpdateCacheList);		
+	}		
+};		
+
+lib.tfontAvailable = function(family, totalTypekitCount) {		
+	lib.properties.webfonts[family] = true;		
+	var txtInst = lib.webFontTxtInst && lib.webFontTxtInst[family] || [];		
+	for(var f = 0; f < txtInst.length; ++f)		
+		lib.addElementsToCache(txtInst[f], tFontsUpdateCacheList);		
+
+	loadedTypekitCount++;		
+	if(loadedTypekitCount == totalTypekitCount) {		
+		lib.updateListCache(tFontsUpdateCacheList);		
+	}		
+};
 // symbols:
 
 
@@ -1327,6 +1388,31 @@ p.nominalBounds = new cjs.Rectangle(-4.7,34.5,590.7,432.1);
 p.nominalBounds = new cjs.Rectangle(-13.6,21.1,616,460.3);
 
 
+(lib.Symbol50 = function(mode,startPosition,loop) {
+	this.initialize(mode,startPosition,loop,{});
+
+	// Layer 2
+	this.instance = new lib.Symbol32();
+	this.instance.parent = this;
+	this.instance.setTransform(123.6,44.1,1,1,0,0,0,123.6,44.1);
+	this.instance.compositeOperation = "lighter";
+	this.instance._off = true;
+	this.instance.filters = [new cjs.ColorFilter(0, 0, 0, 1, 255, 0, 0, 0)];
+	this.instance.cache(-2,-2,251,92);
+
+	this.timeline.addTween(cjs.Tween.get(this.instance).wait(1).to({_off:false},0).wait(1));
+
+	// Layer 1
+	this.instance_1 = new lib.Symbol32();
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(123.6,44.1,1,1,0,0,0,123.6,44.1);
+
+	this.timeline.addTween(cjs.Tween.get(this.instance_1).wait(2));
+
+}).prototype = p = new cjs.MovieClip();
+p.nominalBounds = new cjs.Rectangle(0,0,247.2,88.3);
+
+
 (lib.Symbol44 = function(mode,startPosition,loop) {
 	this.initialize(mode,startPosition,loop,{});
 
@@ -1344,9 +1430,10 @@ p.nominalBounds = new cjs.Rectangle(-13.6,21.1,616,460.3);
 	this.initialize(mode,startPosition,loop,{});
 
 	// Layer 1
-	this.instance = new lib.Symbol32();
+	this.instance = new lib.Symbol50();
 	this.instance.parent = this;
 	this.instance.setTransform(123.6,44.1,1,1,0,0,0,123.6,44.1);
+	new cjs.ButtonHelper(this.instance, 0, 1, 1);
 
 	this.timeline.addTween(cjs.Tween.get(this.instance).wait(1));
 
@@ -1559,30 +1646,31 @@ lib.properties = {
 	fps: 24,
 	color: "#000000",
 	opacity: 1.00,
+	webfonts: {},
 	manifest: [
-		{src:"images/Bitmap1.png?1509111685018", id:"Bitmap1"},
-		{src:"images/buty.png?1509111685018", id:"buty"},
-		{src:"images/con1.png?1509111685018", id:"con1"},
-		{src:"images/con2.png?1509111685018", id:"con2"},
-		{src:"images/con3.png?1509111685018", id:"con3"},
-		{src:"images/fullho.png?1509111685018", id:"fullho"},
-		{src:"images/gather.png?1509111685018", id:"gather"},
-		{src:"images/kare.png?1509111685018", id:"kare"},
-		{src:"images/orrr.png?1509111685018", id:"orrr"},
-		{src:"images/PD_logo.png?1509111685018", id:"PD_logo"},
-		{src:"images/phon2.png?1509111685018", id:"phon2"},
-		{src:"images/phone1.png?1509111685018", id:"phone1"},
-		{src:"images/phone3.png?1509111685018", id:"phone3"},
-		{src:"images/que1.png?1509111685018", id:"que1"},
-		{src:"images/que2.png?1509111685018", id:"que2"},
-		{src:"images/ten1.png?1509111685018", id:"ten1"},
-		{src:"images/ten2.png?1509111685018", id:"ten2"},
-		{src:"images/ten3.png?1509111685018", id:"ten3"},
-		{src:"images/ten4.png?1509111685018", id:"ten4"},
-		{src:"images/the36iph.png?1509111685018", id:"the36iph"},
-		{src:"images/theone.png?1509111685018", id:"theone"},
-		{src:"images/thetwo.png?1509111685018", id:"thetwo"},
-		{src:"images/win.png?1509111685018", id:"win"}
+		{src:"images/Bitmap1.png", id:"Bitmap1"},
+		{src:"images/buty.png", id:"buty"},
+		{src:"images/con1.png", id:"con1"},
+		{src:"images/con2.png", id:"con2"},
+		{src:"images/con3.png", id:"con3"},
+		{src:"images/fullho.png", id:"fullho"},
+		{src:"images/gather.png", id:"gather"},
+		{src:"images/kare.png", id:"kare"},
+		{src:"images/orrr.png", id:"orrr"},
+		{src:"images/PD_logo.png", id:"PD_logo"},
+		{src:"images/phon2.png", id:"phon2"},
+		{src:"images/phone1.png", id:"phone1"},
+		{src:"images/phone3.png", id:"phone3"},
+		{src:"images/que1.png", id:"que1"},
+		{src:"images/que2.png", id:"que2"},
+		{src:"images/ten1.png", id:"ten1"},
+		{src:"images/ten2.png", id:"ten2"},
+		{src:"images/ten3.png", id:"ten3"},
+		{src:"images/ten4.png", id:"ten4"},
+		{src:"images/the36iph.png", id:"the36iph"},
+		{src:"images/theone.png", id:"theone"},
+		{src:"images/thetwo.png", id:"thetwo"},
+		{src:"images/win.png", id:"win"}
 	],
 	preloads: []
 };
